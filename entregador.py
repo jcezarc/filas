@@ -1,5 +1,4 @@
 from mongo_table import MongoTable
-from restaurante import Restaurante
 from pedido import Pedido, STATUS_PREPARANDO, STATUS_EM_TRANSPORTE
 
 

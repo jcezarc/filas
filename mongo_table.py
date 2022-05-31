@@ -1,7 +1,5 @@
 from pymongo import MongoClient
 
-MONGO_URL = '{server}{host_or_user}:{port_or_password}{suffix}'
-
 
 class MongoTable:
     _db = None
