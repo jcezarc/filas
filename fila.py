@@ -1,7 +1,6 @@
 """
 Cria pedidos fictícios para testar o sistema.
-Cada tipo de usuário (Restaurante, Cliente, MotoBoy)
-... pode rodar o app separadamente e consumir a fila
+E cria as pessoas envolvidas, caso não existam.
 """
 
 from cliente import Cliente
@@ -12,7 +11,7 @@ from pedido import Pedido, STATUS_PENDENTE
 DOCES = ['Arroz doce', 'Curau cremoso', 'Bananada de tacho']
 
 
-if __name__ == '__main__':
+def grava_pedido():
     params = {
         'cliente': Cliente('Sheila Kely Maria Creuza'),
         'entregador': Entregador('Lucia Santoro Gusmão'),
@@ -26,13 +25,18 @@ if __name__ == '__main__':
     ).add_prato(
         DOCES[2], 11.10
     )
-    for pessoa in params.values():
+    for pessoa in list(params.values())[:3]:
         if not pessoa.find():
+            print('Gravando {} "{}"...'.format(pessoa.__class__.__name__, pessoa.nome))
             pessoa.save()
     novo_pedido = Pedido(**params)
     for i in range(3):
         novo_pedido.add(DOCES[i], i+1)
     novo_pedido.save()
-    print('Valor do pedido {}: R$ {:.2f}'.format(
+    return 'Valor do pedido {}: R$ {:.2f}'.format(
         novo_pedido.id, novo_pedido.total()
-    )) # valor esperado: 56.5
+    ), 200
+
+if __name__ == '__main__':
+    print('-'*50)
+    print( grava_pedido() )

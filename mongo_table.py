@@ -11,11 +11,11 @@ class MongoTable:
         if not self._db:
             conn = MongoClient('mongodb://localhost:27017/')
             self._db = conn['fome_DQ']
-        self._collection = self.db.get_collection(table_name)
+        self._collection = self._db.get_collection(table_name)
 
     def save(self):
         record  = self.__data()
-        key = record.keys()[0]
+        key = list(record.keys())[0]
         self._collection.update_one(
             {key: record[key]},
             {'$set': record},
@@ -29,7 +29,7 @@ class MongoTable:
         }
 
     def find(self) -> list:
-        return self._collection.find(filter=self.__data())
+        return list(self._collection.find(filter=self.__data()))
 
     def delete(self):
         filter = self.__data()

@@ -1,14 +1,12 @@
-from dataclasses import dataclass
 from mongo_table import MongoTable
+from restaurante import Restaurante
 from pedido import Pedido, STATUS_EM_TRANSPORTE, STATUS_ENTREGUE
-from fastapi import FastAPI
-import uvicorn
 
 
-
-@dataclass
 class Cliente(MongoTable):
-    nome: str
+    def __init__(self, nome: str):
+        self.nome = nome
+        super().__init__()
 
     def recebe_pedidos(self):
         busca = Pedido(
@@ -18,22 +16,16 @@ class Cliente(MongoTable):
         )
         encontrado = busca.find()
         if encontrado:
-            primeiro = encontrado.pop(0)
-            print('Pedido {} recebido por {} !!'.format(
+            dados = encontrado.pop(0)
+            pedido = Pedido(Restaurante(
+                dados['nome_restaurante']),
+                **dados
+            )
+            msg = 'Pedido {} recebido por {} !!'.format(
                 pedido.id,
                 self.nome
-            ))
-            pedido = Pedido(**primeiro)
+            )
             pedido.status = STATUS_ENTREGUE
             pedido.save()
-            return pedido, 200
-        return None, 404
-
-
-if __name__ == '__main__':
-    app = FastAPI()
-    @app.get('/cliente/{nome}')
-    def get_cliente(nome: str):
-        cliente = Cliente(nome=nome)
-        return cliente.recebe_pedidos()
-    uvicorn.run(app)
+            return msg, 200
+        return '', 404
