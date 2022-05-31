@@ -10,17 +10,13 @@ class Cliente(MongoTable):
 
     def recebe_pedidos(self):
         busca = Pedido(
-            restaurante=None,
             status=STATUS_EM_TRANSPORTE,
-            cliente=self.nome
+            cliente=self
         )
         encontrado = busca.find()
         if encontrado:
             dados = encontrado.pop(0)
-            pedido = Pedido(
-                Restaurante(dados['nome_restaurante']),
-                **dados
-            )
+            pedido = Pedido(**dados)
             msg = 'Pedido {} recebido por {} !!'.format(
                 pedido.id,
                 self.nome

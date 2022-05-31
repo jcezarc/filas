@@ -8,20 +8,21 @@ STATUS_ENTREGUE = 4
 
 
 class Pedido(MongoTable):
-    def __init__(self, restaurante: type, **args):
+    def __init__(self, **args):
+        self._precos = {}
         def extrai_nome(key: str):
             obj = args.get(key, '')
             if hasattr(obj, 'nome'):
+                if key == 'restaurante':
+                    self._precos = obj.pratos
                 return obj.nome
             return obj
         self.id = args.get('id')
-        self.__restaurante = restaurante
-        if restaurante:
-            self.nome_restaurante = restaurante.nome
         self.pratos = {}
         self.status = args.get('status', 0)
         self.cliente = extrai_nome('cliente')
         self.entregador = extrai_nome('entregador')
+        self.restaurante = extrai_nome('restaurante')
         super().__init__()
 
     def add(self, prato: str, quantidade: int=1):
@@ -30,5 +31,5 @@ class Pedido(MongoTable):
         self.pratos[prato] = quantidade
 
     def total(self) -> float:
-        ref = self.__restaurante.pratos
+        ref = self._precos
         return sum(ref[p] * q for p, q in self.pratos.items())

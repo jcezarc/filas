@@ -17,7 +17,7 @@ class Restaurante(MongoTable):
         encontrado = busca.find()
         if encontrado:
             dados = encontrado.pop(0)
-            pedido = Pedido(self, **dados)
+            pedido = Pedido(**dados)
             msg = 'Preparando o pedido {}...'.format(pedido.id)
             pedido.status = STATUS_PREPARANDO
             pedido.save()

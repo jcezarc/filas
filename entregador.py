@@ -9,14 +9,11 @@ class Entregador(MongoTable):
         super().__init__()
 
     def recebe_pedidos(self):
-        busca = Pedido(restaurante=None, status=STATUS_PREPARANDO)
+        busca = Pedido(status=STATUS_PREPARANDO)
         encontrado = busca.find()
         if encontrado:
             dados = encontrado.pop(0)
-            pedido = Pedido(
-                Restaurante(dados['nome_restaurante']),
-                **dados
-            )
+            pedido = Pedido(**dados)
             msg = '{} entregando o pedido {}...'.format(
                 self.nome,
                 pedido.id
