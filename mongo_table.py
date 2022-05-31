@@ -1,4 +1,7 @@
+import os
 from pymongo import MongoClient
+
+MONGO_URL = '{server}{host_or_user}:{port_or_password}{suffix}'
 
 
 class MongoTable:
@@ -7,7 +10,16 @@ class MongoTable:
     def __init__(self):
         table_name = self.__class__.__name__
         if not self._db:
-            conn = MongoClient('mongodb://localhost:27017/')
+            password = os.environ.get('MONGO_PASSWORD')
+            if password:
+                conn = MongoClient(MONGO_URL.format(
+                    server='mongodb+srv://',
+                    host_or_user='julio',
+                    port_or_password=password,
+                    suffix='@cluster0.at3xql1.mongodb.net/test'
+                ))
+            else:
+                conn = MongoClient('mongodb://localhost:27017/')
             self._db = conn['fome_DQ']
         self._collection = self._db.get_collection(table_name)
 
