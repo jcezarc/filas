@@ -17,8 +17,8 @@ class Cliente(MongoTable):
         encontrado = busca.find()
         if encontrado:
             dados = encontrado.pop(0)
-            pedido = Pedido(Restaurante(
-                dados['nome_restaurante']),
+            pedido = Pedido(
+                Restaurante(dados['nome_restaurante']),
                 **dados
             )
             msg = 'Pedido {} recebido por {} !!'.format(

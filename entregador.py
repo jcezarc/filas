@@ -13,8 +13,8 @@ class Entregador(MongoTable):
         encontrado = busca.find()
         if encontrado:
             dados = encontrado.pop(0)
-            pedido = Pedido(Restaurante(
-                dados['nome_restaurante']),
+            pedido = Pedido(
+                Restaurante(dados['nome_restaurante']),
                 **dados
             )
             msg = '{} entregando o pedido {}...'.format(
