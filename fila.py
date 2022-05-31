@@ -1,8 +1,3 @@
-"""
-Cria pedidos fictícios para testar o sistema.
-E cria as pessoas envolvidas, caso não existam.
-"""
-
 from cliente import Cliente
 from entregador import Entregador
 from restaurante import Restaurante
@@ -29,6 +24,7 @@ def grava_pedido():
         if not pessoa.find():
             print('Gravando {} "{}"...'.format(pessoa.__class__.__name__, pessoa.nome))
             pessoa.save()
+    params.pop('entregador') # --- Só será atribuído quando retirar para transporte
     novo_pedido = Pedido(**params)
     for i in range(3):
         novo_pedido.add(DOCES[i], i+1)
