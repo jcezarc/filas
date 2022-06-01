@@ -9,6 +9,8 @@ class Entregador(MongoTable, Buscador):
         super().__init__()
 
     def busca_pedido(self) -> list:
+        if not self.find():
+            raise Exception('Entregador não cadastrado')
         return Pedido(status=STATUS_PREPARANDO).find()
 
     def atualiza(self, pedido) -> str:

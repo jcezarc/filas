@@ -1,3 +1,5 @@
+from pedido import Pedido
+
 class Buscador:
     def busca_pedido(self) -> list:
         pass
